@@ -10,12 +10,12 @@
  *  (at your option) any later version.
  */
 
+#include "config.h" /* CooCox workaround */
 #include "stm32f10x.h"
 #include "usb_hid.h"
 #include "irmpmain.h"
 #include "eeprom.h"
 #include "st_link_leds.h"
-#include "config.h" /* CooCox workaround */
 
 #define BYTES_PER_QUERY	(HID_IN_BUFFER_SIZE - 4)
 /* after plugging in, it takes some time, until SOF's are being sent to the device */
@@ -42,7 +42,7 @@ enum __attribute__ ((__packed__)) status {
 	STAT_FAILURE
 };
 
-const char firmware[] = FW_STR;
+const char firmware[] = "FW_STR";
 
 const char supported_protocols[] = {
 #if IRMP_SUPPORT_SIRCS_PROTOCOL==1
@@ -196,7 +196,19 @@ void delay_ms(unsigned int msec)
 void LED_Switch_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
+#ifdef STM32F103C8T6
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = LED_PIN;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(LED_PORT, &GPIO_InitStructure);
+#else
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = LED_PIN;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(OUT_PORT, &GPIO_InitStructure);
+#endif
 #ifdef ST_Link
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
 	/* disable SWD, so pins are available */
@@ -208,10 +220,6 @@ void LED_Switch_init(void)
 #else
 	GPIO_WriteBit(OUT_PORT, WAKEUP_PIN, Bit_RESET);
 #endif /* SimpleCircuit */
-	GPIO_InitStructure.GPIO_Pin = LED_PIN;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(OUT_PORT, &GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = WAKEUP_PIN;
 #ifdef SimpleCircuit
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
@@ -221,7 +229,7 @@ void LED_Switch_init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(RESET_PORT, &GPIO_InitStructure);
 	/* start with LED on */
-	GPIO_WriteBit(OUT_PORT, LED_PIN, Bit_SET);
+	GPIO_WriteBit(LED_PORT, LED_PIN, Bit_SET);
 }
 
 void toggle_LED(void)
@@ -233,7 +241,7 @@ void toggle_LED(void)
 		LED_deinit();
 	}
 #endif /* ST_Link */
-	OUT_PORT->ODR ^= LED_PIN;
+	LED_PORT->ODR ^= LED_PIN;
 }
 
 /* buf[0 ... 5] -> eeprom[virt_addr ... virt_addr + 2] */

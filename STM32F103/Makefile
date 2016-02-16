@@ -43,6 +43,10 @@ ifeq ($(Platform), Red)
 DEFINES += -DRedLink
 TARGET = Red
 endif
+ifeq ($(Platform), STM32F103C8T6)
+DEFINES += -DSTM32F103C8T6
+TARGET = STM32F103C8T6
+endif
 
 ifdef SimpleCircuit
 DEFINES += -DSimpleCircuit
@@ -64,7 +68,7 @@ else
 LDFLAGS = -nostartfiles -Wl,-Map=$(TARGET).map,--gc-sections,--entry=main,-Tscripts/arm-gcc-link.ld $(ARCH) $(COMMON)
 endif
 
-COMPILED_BY = jrie
+COMPILED_BY = glotzi
 TARGET := $(TARGET)_$(COMPILED_BY)
 
 $(TARGET).bin: $(TARGET).elf
