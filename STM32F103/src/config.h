@@ -39,45 +39,53 @@
 
 /* B11 IRMP (irmpconfig.h), B6 IRSND (irsndconfig.h) , B10 Logging (irmp.c) */
 
-#ifdef BlueLink /* blue ST-Link */
-	#define OUT_PORT	GPIOA
-	#define LED_PORT	GPIOA
-	#define LED_PIN		GPIO_Pin_14
-	#define IR_IN_PORT      B
-	#define IR_IN_PIN       11
-	#define WAKEUP_PIN	GPIO_Pin_13
-	#define RESET_PORT	GPIOB
-	#define WAKEUP_RESET_PIN GPIO_Pin_14
-	#define USB_DISC_PORT GPIOB
-	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOB /* TODO use concat */
-	#define USB_DISC_PIN  GPIO_Pin_13
-#else /* red ST-Link and developer board */
-#ifdef STM32F103C8T6
-	#define LED_PORT 	GPIOC
-	#define LED_PIN		GPIO_Pin_13
-	#define IR_IN_PORT	B
-	#define IR_IN_PIN	9
-#else
-	#define LED_PORT	GPIOB
-	#define LED_PIN		GPIO_Pin_13
-	#define IR_IN_PORT	B
-	#define IR_IN_PIN	11
-#endif
-	#define OUT_PORT	GPIOB
-	#define WAKEUP_PIN	GPIO_Pin_14
-#ifdef RedLink /* red ST-Link */
-	#define RESET_PORT	GPIOA
-	#define WAKEUP_RESET_PIN GPIO_Pin_14
-	#define USB_DISC_PORT GPIOA
-	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOA /* TODO use concat */
-	#define USB_DISC_PIN  GPIO_Pin_13
-#else /* developer board */
-	#define RESET_PORT	GPIOB
+#ifdef STM32F103C8T6 /* STM32F103C8T6 developer board */
+	#define OUT_PORT	     GPIOB
+	#define LED_PORT 	     GPIOC
+	#define LED_PIN		     GPIO_Pin_13
+	#define IR_IN_PORT	     B
+	#define IR_IN_PIN	     9
+	#define WAKEUP_PIN	     GPIO_Pin_14
+	#define RESET_PORT	     GPIOB
 	#define WAKEUP_RESET_PIN GPIO_Pin_12
-	#define USB_DISC_PORT GPIOB
+	#define USB_DISC_PORT    GPIOB
+	#define USB_DISC_PIN     GPIO_Pin_15
 	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOB /* TODO use concat */
-	#define USB_DISC_PIN  GPIO_Pin_15
-#endif /* ST_Link */
-#endif /* BlueLink */
-
+#elif BlueLink /* blue ST-Link */
+	#define OUT_PORT	     GPIOA
+	#define LED_PORT	     GPIOA
+	#define LED_PIN		     GPIO_Pin_14
+	#define IR_IN_PORT       B
+	#define IR_IN_PIN        11
+	#define WAKEUP_PIN	     GPIO_Pin_13
+	#define RESET_PORT	     GPIOB
+	#define WAKEUP_RESET_PIN GPIO_Pin_14
+	#define USB_DISC_PORT    GPIOB
+	#define USB_DISC_PIN     GPIO_Pin_13
+	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOB /* TODO use concat */
+#elif RedLink /* red ST-Link */
+	#define OUT_PORT	     GPIOB
+	#define LED_PORT	     GPIOB
+	#define LED_PIN		     GPIO_Pin_13
+	#define IR_IN_PORT	     B
+	#define IR_IN_PIN	     11
+	#define WAKEUP_PIN	     GPIO_Pin_14
+	#define RESET_PORT	     GPIOA
+	#define WAKEUP_RESET_PIN GPIO_Pin_14
+	#define USB_DISC_PORT    GPIOA
+	#define USB_DISC_PIN     GPIO_Pin_13
+	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOA /* TODO use concat */
+#else /* developer board */
+	#define OUT_PORT	     GPIOB
+	#define LED_PORT	     GPIOB
+	#define LED_PIN		     GPIO_Pin_13
+	#define IR_IN_PORT	     B
+	#define IR_IN_PIN	     11
+	#define WAKEUP_PIN	     GPIO_Pin_14
+	#define RESET_PORT	     GPIOB
+	#define WAKEUP_RESET_PIN GPIO_Pin_12
+	#define USB_DISC_PORT    GPIOB
+	#define USB_DISC_PIN     GPIO_Pin_15
+	#define USB_DISC_RCC_APB2Periph RCC_APB2Periph_GPIOB /* TODO use concat */
+#endif
 #endif /* __CONFIG_H */
